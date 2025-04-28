@@ -1,0 +1,14 @@
+<div *ngIf="article">
+  <h1>{{ article.title }}</h1>
+  <p><strong>Description:</strong> {{ article.description }}</p>
+  <p><strong>Published Date:</strong> {{ article.publishedDate | date }}</p>
+  <p><strong>Modified Date:</strong> {{ article.modifiedDate | date }}</p>
+  <p><strong>Author:</strong> {{ article.author }}</p>
+  <div>
+    <strong>Content:</strong>
+    <div [innerHTML]="article.body"></div>
+  </div>
+</div>
+<div *ngIf="!article">
+  <p>Loading article...</p>
+</div>

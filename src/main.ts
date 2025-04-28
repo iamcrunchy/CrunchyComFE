@@ -1,6 +1,17 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { appConfig } from './app/app.config';
+import { provideRouter, RouterModule } from '@angular/router';
 import { AppComponent } from './app/app.component';
+import {ArticleComponent} from './app/article/article.component';
+import {provideHttpClient} from '@angular/common/http';
 
-bootstrapApplication(AppComponent, appConfig)
-  .catch((err) => console.error(err));
+
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideHttpClient(),
+    provideRouter([
+      { path: 'article', component: ArticleComponent }, // Route for the article
+      { path: '', redirectTo: 'article', pathMatch: 'full' }, // Default route
+      { path: '**', redirectTo: 'article' } // Wildcard route for unmatched paths
+    ])
+  ]
+});

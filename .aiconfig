@@ -1,0 +1,110 @@
+{
+  "project": {
+    "name": "CrunchyComFE",
+    "description": "Angular frontend for CrunchyCom application",
+    "structure": {
+      "framework": "Angular",
+      "ide": "WebStorm",
+      "nodeVersion": "22.15.0",
+      "styling": "Bootstrap (with potential migration to Tailwind CSS)",
+      "architectureType": "Standalone Components"
+    }
+  },
+  "instructions": {
+    "general": "When suggesting code, maintain consistency with existing patterns in the codebase.",
+    "architecture": {
+      "pattern": "Feature-based organization with standalone components",
+      "type": "Standalone Architecture",
+      "principles": [
+        "Smart/container and dumb/presentational component pattern",
+        "Single responsibility principle",
+        "DRY (Don't Repeat Yourself)",
+        "Component reusability",
+        "Self-contained standalone components",
+        "Direct dependency imports in components"
+      ],
+      "characteristics": [
+        "No NgModule declarations required",
+        "Dependencies imported directly in components",
+        "Simplified component bootstrapping",
+        "Granular dependency management"
+      ]
+    },
+    "fileNaming": {
+      "components": "kebab-case.component.ts (e.g., product-list.component.ts)",
+      "services": "kebab-case.service.ts (e.g., auth.service.ts)",
+      "models": "kebab-case.model.ts (e.g., user.model.ts)",
+      "modules": "kebab-case.module.ts (e.g., product.module.ts)",
+      "pipes": "kebab-case.pipe.ts (e.g., format-currency.pipe.ts)",
+      "directives": "kebab-case.directive.ts (e.g., highlight.directive.ts)"
+    },
+    "codeStructure": {
+      "components": {
+        "organization": "Organize by feature modules with shared components where appropriate",
+        "structure": "Separate component class, template, and styling files"
+      },
+      "services": {
+        "pattern": "Injectable services for data fetching, state management, and business logic",
+        "httpCommunication": "Use Angular HttpClient for API communication"
+      },
+      "models": "TypeScript interfaces matching API data structures",
+      "stateManagement": "Service-based state management (may evolve to NgRx for complex state needs)"
+    },
+    "styling": {
+      "framework": "Bootstrap currently, with potential migration to Tailwind CSS",
+      "organization": "Component-scoped styles with SCSS",
+      "responsiveDesign": "Mobile-first approach with responsive breakpoints"
+    },
+    "apiCommunication": {
+      "baseUrl": "Environment-based API URLs",
+      "endpoints": {
+        "users": "/api/users",
+        "products": "/api/products",
+        "orders": "/api/orders"
+      },
+      "interceptors": "Use HTTP interceptors for common request/response handling"
+    },
+    "componentOrganization": {
+      "featureModules": [
+        "User module - User management and profiles",
+        "Product module - Product catalog and details",
+        "Order module - Shopping cart and checkout",
+        "Core module - Core services, guards, and interceptors",
+        "Shared module - Reusable components, directives, and pipes"
+      ]
+    },
+    "routing": {
+      "strategy": "Feature-based routing with lazy loading",
+      "guards": "Route guards for authentication and authorization"
+    },
+    "forms": {
+      "approach": "Reactive forms for complex forms, template-driven for simple forms",
+      "validation": "Form validation with error messages"
+    }
+  },
+  "codeGeneration": {
+    "templates": {
+      "component": {
+        "description": "Angular component template",
+        "files": ["*.component.ts", "*.component.html", "*.component.scss"]
+      },
+      "service": {
+        "description": "Angular service for data access or business logic",
+        "methods": ["getAll()", "getById(id)", "create(model)", "update(id, model)", "delete(id)"]
+      },
+      "module": {
+        "description": "Angular module for feature organization",
+        "components": ["Declarations", "Imports", "Exports", "Providers"]
+      },
+      "model": {
+        "description": "TypeScript interface for data models",
+        "components": ["Properties", "Optional properties", "Nested interfaces"]
+      }
+    }
+  },
+  "externalDependencies": {
+    "styling": "Bootstrap (considering Tailwind CSS)",
+    "httpClient": "Angular HttpClient",
+    "backendApi": "CrunchyCom .NET API"
+  }
+}

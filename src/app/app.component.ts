@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
-import {RouterLink, RouterOutlet} from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import {RouterOutlet, RouterLink} from '@angular/router';
+import {NavMenuComponent} from './shared/components/nav-menu/nav-menu.component';
+// import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink],
+  standalone: true,
+  imports: [RouterOutlet, RouterLink, NavMenuComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

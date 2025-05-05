@@ -1,1 +1,262 @@
-<p>home works!</p>
+<!-- Hero Section -->
+<section class="hero-section">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6">
+        <h1 class="hero-title">Creative Design Solutions</h1>
+        <p class="hero-text">
+          Transform your ideas into reality with our innovative design and development services.
+          We create stunning digital experiences that drive results.
+        </p>
+        <div class="hero-buttons">
+          <button class="btn btn-primary me-3">Get Started</button>
+          <button class="btn btn-outline-primary">Learn More</button>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <img ngSrc="assets/grumpyGnome.png" alt="Hero Image"
+             class="img-fluid hero-image" height="1024" width="1024">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features Carousel Section -->
+<section class="features-section">
+  <div class="container">
+    <h2 class="section-title">Why Choose CrunchyCom</h2>
+
+    <div class="carousel-container">
+      <div class="carousel" [style.transform]="'translateX(-' + (currentIndex * 100) + '%)'">
+
+        <!-- Feature 1 -->
+        <div class="carousel-item">
+          <div class="feature-card">
+            <div class="feature-icon">📱</div>
+            <div class="feature-content">
+              <h3>Mobile Forensics Excellence</h3>
+              <p>Specialized training in extracting, analyzing, and presenting digital evidence from mobile devices. Learn industry-standard tools and techniques used by leading forensic investigators.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="carousel-item">
+          <div class="feature-card">
+            <div class="feature-icon">👨‍💻</div>
+            <div class="feature-content">
+              <h3>Expert-Led Programming Tutorials</h3>
+              <p>From Python scripting for automation to secure coding practices, our programming courses are designed specifically for cybersecurity professionals.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="carousel-item">
+          <div class="feature-card">
+            <div class="feature-icon">🛡️</div>
+            <div class="feature-content">
+              <h3>Hands-On Labs & Simulations</h3>
+              <p>Practice in realistic environments with our virtual labs. Apply theoretical knowledge to real-world scenarios without risk.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="carousel-item">
+          <div class="feature-card">
+            <div class="feature-icon">🏆</div>
+            <div class="feature-content">
+              <h3>Industry-Recognized Certification Prep</h3>
+              <p>Our courses align with requirements for top cybersecurity certifications including SANS GCFA, CompTIA, and EC-Council certifications.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+<div class="carousel-arrow carousel-prev" (click)="prevSlide()">❮</div>
+<div class="carousel-arrow carousel-next" (click)="nextSlide()">❯</div>
+
+<div class="carousel-nav">
+  <div *ngFor="let _ of [].constructor(totalItems); let i = index"
+       class="carousel-dot"
+       [class.active]="i === currentIndex"
+       (click)="goToSlide(i)">
+  </div>
+</div>
+    </div>
+  </div>
+</section>
+
+<!-- Featured Courses Section -->
+<section class="courses-section">
+  <div class="container">
+    <h2 class="section-title">Featured Courses</h2>
+
+    <div class="courses-grid">
+      <!-- Course 1 -->
+      <div class="course-card">
+        <div class="course-image" style="background-image: url('../../assets/mobileForensics.png')"></div>
+        <div class="course-content">
+          <span class="course-tag">Mobile Forensics</span>
+          <h3>Advanced Android Device Analysis</h3>
+          <p>Learn to extract and analyze data from Android devices, even with security measures in place.</p>
+          <div class="course-footer">
+            <div class="course-rating">★★★★★ <span>(4.9)</span></div>
+            <a href="#" class="secondary-button">Details</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Course 2 -->
+      <div class="course-card">
+        <div class="course-image" style="background-image: url('../../assets/mobileForensics.png')"></div>
+        <div class="course-content">
+          <span class="course-tag">Programming</span>
+          <h3>Python for Security Automation</h3>
+          <p>Automate security tasks with Python scripts. Build tools for reconnaissance, analysis, and reporting.</p>
+          <div class="course-footer">
+            <div class="course-rating">★★★★☆ <span>(4.7)</span></div>
+            <a href="#" class="secondary-button">Details</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Course 3 -->
+      <div class="course-card">
+        <div class="course-image" style="background-image: url('../../assets/mobileForensics.png')"></div>
+        <div class="course-content">
+          <span class="course-tag">iOS Forensics</span>
+          <h3>iOS Extraction & Analysis</h3>
+          <p>Master techniques for extracting and analyzing data from iPhones and iPads, including encrypted backups.</p>
+          <div class="course-footer">
+            <div class="course-rating">★★★★★ <span>(4.8)</span></div>
+            <a href="#" class="secondary-button">Details</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Newsletter Section -->
+<section class="newsletter-section">
+  <div class="container newsletter-container">
+    <div class="newsletter-content">
+      <h2>Stay Updated on Cybersecurity Trends</h2>
+      <p>Subscribe to our newsletter for the latest in cybersecurity education, tools, and techniques.</p>
+    </div>
+    <form class="newsletter-form">
+      <input type="email" placeholder="Your email address">
+      <button type="submit">Subscribe</button>
+    </form>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-column">
+        <h3>CrunchyCom</h3>
+        <ul>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Our Team</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Press</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h3>Courses</h3>
+        <ul>
+          <li><a href="#">Mobile Forensics</a></li>
+          <li><a href="#">Programming</a></li>
+          <li><a href="#">Ethical Hacking</a></li>
+          <li><a href="#">Network Security</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h3>Resources</h3>
+        <ul>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Guides</a></li>
+          <li><a href="#">Tools</a></li>
+          <li><a href="#">Community</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h3>Connect</h3>
+        <ul>
+          <li><a href="#">Contact Us</a></li>
+          <li><a href="#">Support</a></li>
+          <li><a href="#">Social Media</a></li>
+          <li><a href="#">Partners</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2025 CrunchyCom. All rights reserved. | Privacy Policy | Terms of Service</p>
+    </div>
+  </div>
+</footer>
+
+<!--<script>-->
+<!--  // Simple carousel functionality-->
+<!--  document.addEventListener('DOMContentLoaded', function() {-->
+<!--    const carousel = document.querySelector('.carousel');-->
+<!--    const items = document.querySelectorAll('.carousel-item');-->
+<!--    const dots = document.querySelectorAll('.carousel-dot');-->
+<!--    const prevBtn = document.querySelector('.carousel-prev');-->
+<!--    const nextBtn = document.querySelector('.carousel-next');-->
+<!--    let currentIndex = 0;-->
+<!--    const totalItems = items.length;-->
+
+<!--    // Initialize-->
+<!--    updateCarousel();-->
+
+<!--    // Next button-->
+<!--    nextBtn.addEventListener('click', function() {-->
+<!--      currentIndex = (currentIndex + 1) % totalItems;-->
+<!--      updateCarousel();-->
+<!--    });-->
+
+<!--    // Previous button-->
+<!--    prevBtn.addEventListener('click', function() {-->
+<!--      currentIndex = (currentIndex - 1 + totalItems) % totalItems;-->
+<!--      updateCarousel();-->
+<!--    });-->
+
+<!--    // Dots navigation-->
+<!--    dots.forEach((dot, index) => {-->
+<!--      dot.addEventListener('click', function() {-->
+<!--        currentIndex = index;-->
+<!--        updateCarousel();-->
+<!--      });-->
+<!--    });-->
+
+<!--    // Update carousel position and active dot-->
+<!--    function updateCarousel() {-->
+<!--      carousel.style.transform = `translateX(-${currentIndex * 100}%)`;-->
+
+<!--      // Update active dot-->
+<!--      dots.forEach((dot, index) => {-->
+<!--        if (index === currentIndex) {-->
+<!--          dot.classList.add('active');-->
+<!--        } else {-->
+<!--          dot.classList.remove('active');-->
+<!--        }-->
+<!--      });-->
+<!--    }-->
+
+<!--    // Auto-scroll (optional)-->
+<!--    setInterval(function() {-->
+<!--      currentIndex = (currentIndex + 1) % totalItems;-->
+<!--      updateCarousel();-->
+<!--    }, 5000);-->
+<!--  });-->
+<!--</script>-->

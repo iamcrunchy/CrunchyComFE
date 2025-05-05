@@ -4,6 +4,7 @@ import {DatePipe, NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-article',
+  standalone: true,
   imports: [
     DatePipe,
     NgIf

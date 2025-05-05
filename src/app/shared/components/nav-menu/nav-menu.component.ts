@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router'; // Import specific directives
 // Or you could import the whole module: import { RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common'; // Often needed for *ngIf, *ngFor, etc. (might not be strictly necessary for *this* simple nav, but good practice)
+import {CommonModule, NgOptimizedImage} from '@angular/common'; // Often needed for *ngIf, *ngFor, etc. (might not be strictly necessary for *this* simple nav, but good practice)
 
 @Component({
   selector: 'app-nav-menu',
@@ -9,7 +9,9 @@ import { CommonModule } from '@angular/common'; // Often needed for *ngIf, *ngFo
   imports: [
     CommonModule,
     RouterLink,        // Import RouterLink directive
-    RouterLinkActive   // Import RouterLinkActive directive
+    RouterLinkActive,
+    NgOptimizedImage,
+    // Import RouterLinkActive directive
     // RouterModule // Alternatively, importing the whole module works too
   ], // Import necessary modules/directives directly
   templateUrl: './nav-menu.component.html',

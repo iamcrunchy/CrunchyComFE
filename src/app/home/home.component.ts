@@ -5,7 +5,7 @@ import { RouterLink} from '@angular/router';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, NgOptimizedImage],
+  imports: [CommonModule, NgOptimizedImage, RouterLink],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })

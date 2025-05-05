@@ -2,8 +2,9 @@
   <div class="navbar-container">
 
     <a routerLink="/" class="navbar-brand">
-      <img src="assets/icons/padlock-logo.png" alt="CrunchyCom Logo" class="logo-icon">
-      <span class="brand-name">CrunchyCom</span>
+      <img ngSrc="assets/icons/padlock-logo.png" alt="CrunchyCom Logo"
+           class="logo-icon" height="50" width="50">
+      <span class="brand-name text-white">CrunchyCom</span>
     </a>
 
     <ul class="nav-links">
@@ -11,7 +12,7 @@
         <a routerLink="/home" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">Home</a>
       </li>
       <li>
-        <a routerLink="/courses" routerLinkActive="active-link">Courses</a>
+        <a routerLink="/article" routerLinkActive="active-link">Articles</a>
       </li>
       <li>
         <a routerLink="/resources" routerLinkActive="active-link">Resources</a>

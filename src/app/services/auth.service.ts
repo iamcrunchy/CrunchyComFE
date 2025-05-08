@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {environment} from '../../environments/environment';
 import {BehaviorSubject, catchError, Observable, tap, throwError} from 'rxjs';
-import {AuthState, LoginRequest, LoginResponse} from '../interfaces/auth.models';
+import {AuthState, LoginRequest, LoginResponse} from '../models/auth.models';
 import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
 

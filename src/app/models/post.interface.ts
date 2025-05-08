@@ -1,4 +1,4 @@
-// interfaces/post.interface.ts
+// models/post.interface.ts
 export interface Post {
   _id?: string;
   title: string;

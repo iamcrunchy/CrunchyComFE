@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Post } from '../interfaces/post.interface';
+import { Post } from '../models/post.interface';
 
 @Component({
   selector: 'app-admin',

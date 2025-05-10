@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
-import {environment} from '../../environments/environment';
-import {BehaviorSubject, catchError, Observable, tap, throwError} from 'rxjs';
-import {AuthState, LoginRequest, LoginResponse} from '../models/auth.models';
-import {HttpClient} from '@angular/common/http';
-import {Router} from '@angular/router';
+import { environment } from '../../environments/environment';
+import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
+import { AuthState, LoginRequest, LoginResponse } from '../models/auth.models';
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = `${environment.apiUrl}/auth}`;
-  private tokenExpirationTimer: any;
+  private apiUrl = `${environment.apiUrl}/api/auth`;
+  private tokenExpirationTimer: ReturnType<typeof setTimeout> | null = null;
 
   /**
    * authStateSubject is an instance of BehaviorSubject that holds the authentication
@@ -24,8 +24,6 @@ export class AuthService {
    * - expiresAt: A timestamp indicating when the authentication token expires, or null if not authenticated.
    *
    * This BehaviorSubject is initialized with a default state where the user is not authenticated.
-   *
-   * Auth state as a BehaviorSubject - components can subsribe to changes
    */
   private authStateSubject = new BehaviorSubject<AuthState>({
     isAuthenticated: false,
@@ -66,7 +64,13 @@ export class AuthService {
 
   // check if the user is authenticated
   get isAuthenticated(): boolean {
-    return this.authState.isAuthenticated && !!this.authState.token;
+    const currentState = this.authStateSubject.value;
+    const valid = currentState.isAuthenticated &&
+      !!currentState.token &&
+      !!currentState.expiresAt &&
+      currentState.expiresAt > Date.now();
+
+    return valid;
   }
 
   /**
@@ -80,16 +84,17 @@ export class AuthService {
   login(credentials: LoginRequest): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.apiUrl}/login`, credentials)
       .pipe(
-        tap(response => this.handleLoginSuccess(response)),
+        tap(response => {
+          this.handleLoginSuccess(response);
+        }),
         catchError(error => {
-          console.error('Login failed', error);
-          return throwError(()=> new Error(error.error?.message || 'Login Failed'));
+          return throwError(() => new Error(error.error?.message || 'Login Failed'));
         })
       );
   }
 
   /**
-   * Logs out the current user by clearing authentication state, removing stored
+   * Logs out the current user by clearing the authentication state, removing stored
    * authentication data, and redirecting to the login page.
    *
    * @return {void} No value is returned from this method.
@@ -111,8 +116,18 @@ export class AuthService {
     // clear local storage
     localStorage.removeItem('auth_data');
 
-    // redirect to login
-    this.router.navigate(['/login']);
+    // redirect to log in
+    const currentUrl = this.router.url;
+
+    // Prevent login loops by not setting returnUrl if current URL is login or contains login
+    // if (currentUrl === '/login' || currentUrl.includes('/login')) {
+    //   this.router.navigate(['/home']);
+    // } else {
+    //   this.router.navigate(['/login'], {
+    //     queryParams: { returnUrl: currentUrl }
+    //   });
+    // }
+    this.router.navigate(['/home']);
   }
 
   /**
@@ -155,7 +170,7 @@ export class AuthService {
   }
 
   /**
-   * Handles the successful login process by updating authentication state,
+   * Handles the successful login process by updating the authentication state,
    * saving data to local storage, and setting an auto-logout timer.
    *
    * @param {LoginResponse} response The response object containing authentication details,
@@ -163,13 +178,45 @@ export class AuthService {
    * @return {void} Does not return a value.
    */
   private handleLoginSuccess(response: LoginResponse): void {
-    // calculate expiration time in milliseconds
-    const expiresAt = Date.now() + response.expiresIn * 1000;
+    // Calculate expiration time based on expiresIn value
+    // expiresIn could be a date string or a duration in seconds
+    let expiresAt: number;
+
+    // if (isNaN(Number(response.expiresIn))) {
+    //   // If it's not a number, treat it as a date string
+    //   expiresAt = new Date(response.expiresIn).getTime();
+    // } else {
+    //   // If it's a number, treat it as seconds from now
+    //   expiresAt = Date.now() + Number(response.expiresIn) * 1000;
+    // }
+    // Option 1: If expiresIn is seconds from now (common format)
+    if (typeof response.expiresIn === 'number') {
+      expiresAt = Date.now() + (response.expiresIn * 1000); // Convert seconds to milliseconds
+    }
+    // Option 2: If expiresIn is an ISO date string
+    else if (typeof response.expiresIn === 'string' && response.expiresIn.includes('T')) {
+      expiresAt = new Date(response.expiresIn).getTime();
+    }
+    // Option 3: If expiresIn is a timestamp
+    else if (!isNaN(Number(response.expiresIn))) {
+      expiresAt = Number(response.expiresIn);
+    }  // Fallback with debugging
+    else {
+      console.error('Unexpected expiresIn format:', response.expiresIn, typeof response.expiresIn);
+      // Set a default expiration (e.g., 1 hour)
+      expiresAt = Date.now() + (3600 * 1000);
+    }
+    console.log('Token expiration calculation:', {
+      expiresIn: response.expiresIn,
+      calculatedExpiresAt: expiresAt,
+      humanReadable: new Date(expiresAt).toLocaleString(),
+      millisUntilExpiry: expiresAt - Date.now()
+    });
 
     // create the auth state
     const authState: AuthState = {
       isAuthenticated: true,
-      token: response.accessToken,
+      token: response.token,
       username: response.userName,
       expiresAt: expiresAt
     };
@@ -181,12 +228,24 @@ export class AuthService {
     localStorage.setItem('auth_data', JSON.stringify(authState));
 
     // set the auto-logout timer
-    this.autoLogout(response.expiresIn * 1000);
+    const timeUntilExpiry = expiresAt - Date.now();
+    this.autoLogout(timeUntilExpiry);
+
   }
 
+  /**
+   * Sets up an automatic logout timer that will trigger when the token expires.
+   *
+   * @param {number} expiresInMs The time in milliseconds until the token expires.
+   * @return {void} Does not return a value.
+   */
   private autoLogout(expiresInMs: number): void {
+    if (this.tokenExpirationTimer) {
+      clearTimeout(this.tokenExpirationTimer);
+    }
+
     this.tokenExpirationTimer = setTimeout(() => {
-      this.logout();
+     // this.logout();
     }, expiresInMs);
   }
 }

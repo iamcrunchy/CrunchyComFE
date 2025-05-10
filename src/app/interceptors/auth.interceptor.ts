@@ -1,46 +1,58 @@
 import {
   HttpErrorResponse,
-  HttpEvent,
-  HttpHandler,
-  HttpInterceptor,
   HttpInterceptorFn,
   HttpRequest
 } from '@angular/common/http';
-import {Injectable} from '@angular/core';
+import { inject } from '@angular/core';
 import { AuthService } from '../services/auth.service';
-import {Router} from '@angular/router';
-import {catchError, Observable, throwError} from 'rxjs';
+import { Router } from '@angular/router';
+import { catchError, throwError } from 'rxjs';
+import { environment } from '../../environments/environment';
 
-@Injectable()
-export class AuthInterceptor implements HttpInterceptor {
-  constructor(
-    private authService: AuthService,
-    private router: Router
-  ){}
+/**
+ * Interceptor that adds authentication token to outgoing requests
+ * and handles authentication-related error responses.
+ */
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
+  const authService = inject(AuthService);
+  const router = inject(Router);
 
-  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    // get the auth token
-    const token = this.authService.token;
+  // Add auth token to request if available and if it's going to our API
+  const token = authService.token;
+  const isApiRequest = req.url.startsWith(environment.apiUrl);
 
-    // if token exists, clone the request and add teh auth header
-    if(token){
-      request = request.clone({
-        setHeaders: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-    }
-
-    // pass the request to the next handler
-    return next.handle(request).pipe(
-      catchError((error: HttpErrorResponse) => {
-        // handle unauthorized errors (401: expired token, etc.)
-        if(error.status === 401){
-          this.authService.logout();
-          this.router.navigate(['/login']);
-        }
-        return throwError(() => error);
-      })
-    );
+  if (token && isApiRequest) {
+    req = req.clone({
+      setHeaders: {
+        Authorization: `Bearer ${token}`
+      }
+    });
   }
-}
+
+  // Process the response
+  return next(req).pipe(
+    catchError((error: HttpErrorResponse) => {
+      // Handle network connectivity issues
+      if (error.status === 0) {
+        return throwError(() => new Error('Network error. Please try again.'));
+      }
+
+      // Handle authentication errors
+      if (error.status === 401) {
+        authService.logout();
+        router.navigate(['/login'], {
+          queryParams: { returnUrl: router.url }
+        });
+        return throwError(() => new Error('Session expired. Please login again.'));
+      }
+
+      // Handle validation errors
+      if (error.status === 400) {
+        return throwError(() => new Error(error.error?.message || 'Invalid request. Please check your input.'));
+      }
+
+      // Handle all other errors
+      return throwError(() => new Error(error.error?.message || 'An error occurred. Please try again.'));
+    })
+  );
+};
